@@ -22,62 +22,37 @@
             padding: 0;
         }
 
+        /* --- THE GLITCH-PROOF BACKGROUND STRATEGY --- */
+        html {
+            /* We set the background here so it's outside the body scroll */
+            background: #0a050a url('https://i.imgur.com/Ogmlfsj.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            height: 100%;
+            overflow: hidden; /* Prevents the 'bounce' effect */
+        }
+
         body {
             font-family: 'Dancing Script', cursive;
             color: var(--text-main);
+            height: 100%;
+            overflow-y: auto; /* Content scrolls inside the body */
+            -webkit-overflow-scrolling: touch; /* Smooth momentum scroll for iOS */
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            /* Support for modern mobile viewports */
-            min-height: 100dvh;
-            padding: 20px;
-            background-color: #0a050a;
-            /* Allow scrolling of the content, but the body itself stays put */
-            overflow-x: hidden;
+            align-items: flex-start; /* Start from top so it doesn't jump to center */
+            padding: 40px 20px;
         }
 
-        /* --- THE PERMANENTLY FIXED BACKGROUND --- */
-        .bg-fixed {
-            position: fixed; /* Locks it to the screen */
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh; /* Fallback */
-            height: 100lvh; /* Large viewport to cover address bar gaps */
-            z-index: -1; /* Puts it behind everything */
-            
-            /* Background Properties */
-            background: url('https://i.imgur.com/Ogmlfsj.jpeg') no-repeat center center;
-            background-size: cover;
-            
-            /* FIX: This prevents the image from moving with the page scroll */
-            background-attachment: fixed;
-            
-            /* Performance & Stability Hacks */
-            pointer-events: none;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
-            will-change: transform;
-        }
-
-        /* --- DESKTOP BACKGROUND --- */
         @media (min-width: 850px) {
-            .bg-fixed {
+            html {
                 background-image: url('https://i.imgur.com/7iZDuwB.jpeg');
-                /* Desktop likes fixed attachment for that parallax feel */
-                background-attachment: fixed;
+            }
+            body {
+                align-items: center; /* Center on desktop where there's no address bar jump */
             }
         }
 
-        /* FIX: Some mobile browsers ignore background-attachment: fixed, 
-           so we force the container to be the absolute scroll reference */
-        @media (max-width: 849px) {
-            .bg-fixed {
-                background-attachment: scroll; /* CSS Trick: scroll + position:fixed = locked background */
-            }
-        }
-
+        /* --- Profile Card --- */
         .profile-container {
             background: rgba(15, 10, 15, 0.7); 
             border: 2px solid rgba(255, 102, 178, 0.5);
@@ -90,7 +65,7 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             animation: fadeIn 1.2s ease-out;
-            margin: 20px 0; /* Ensures there is space to scroll */
+            margin-bottom: 40px;
         }
 
         @keyframes fadeIn {
@@ -98,7 +73,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- Styling Sections --- */
+        /* Header & Sections */
         .header { text-align: center; margin-bottom: 25px; }
         .welcome-text { font-size: 2.2rem; text-shadow: var(--neon-glow); font-weight: 700; }
         .profile-title { font-size: 3.8rem; text-shadow: var(--neon-glow); line-height: 1.1; margin-bottom: 10px; font-weight: 700; }
@@ -165,6 +140,7 @@
             box-shadow: 0 0 5px var(--neon-pink);
         }
 
+        /* Links */
         .links-wrapper { display: flex; flex-direction: column; gap: 15px; }
         .link-btn {
             display: flex;
@@ -206,8 +182,6 @@
     </style>
 </head>
 <body>
-
-    <div class="bg-fixed" id="bg-frozen"></div>
 
     <div class="profile-container">
         <i class="fa-solid fa-star-of-life sparkle s1"></i>
@@ -294,15 +268,6 @@
     </div>
 
     <script>
-        // --- HEIGHT LOCKER ---
-        const bg = document.getElementById('bg-frozen');
-        const lockHeight = () => {
-            bg.style.height = window.innerHeight + 'px';
-        };
-        window.addEventListener('load', lockHeight);
-        window.addEventListener('resize', lockHeight);
-
-        // --- MUSIC ---
         const audio = document.getElementById('bg-music');
         const playBtn = document.getElementById('play-pause-btn');
         const icon = playBtn.querySelector('i');
