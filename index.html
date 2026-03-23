@@ -22,59 +22,54 @@
             padding: 0;
         }
 
-        /* --- THE NUCLEAR OPTION FOR JUMPING GLITCHES --- */
-        html, body {
-            height: 100%;
-            background-color: #0a050a;
+        /* --- THE GLITCH KILLER STRATEGY --- */
+        body {
             font-family: 'Dancing Script', cursive;
             color: var(--text-main);
+            background-color: #0a050a;
+            margin: 0;
+            padding: 0;
+            /* This ensures the scroll stays on the content, not the background */
+            min-height: 100%;
         }
 
-        .bg-container {
+        /* Fixed background using pseudo-element to bypass mobile address bar resizing */
+        body::before {
+            content: "";
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
+            /* Using a slight over-height to prevent the white gap at bottom */
+            height: 110vh; 
             z-index: -1;
-            overflow: hidden;
-        }
-
-        .bg-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            /* Set height slightly larger than 100% to account for address bar buffer */
-            height: 120vh; 
             background: url('https://i.imgur.com/Ogmlfsj.jpeg') no-repeat center center;
             background-size: cover;
-            /* Force hardware acceleration to keep it smooth */
-            transform: translate3d(0,0,0);
-            -webkit-transform: translate3d(0,0,0);
+            /* Force GPU rendering to stop jitter */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            pointer-events: none;
         }
 
         @media (min-width: 850px) {
-            .bg-image {
+            body::before {
                 background-image: url('https://i.imgur.com/7iZDuwB.jpeg');
                 height: 100vh;
             }
         }
 
-        /* Scrolling content wrapper */
-        .content-scroll {
-            position: relative;
-            z-index: 1;
+        /* Main Content Wrapper */
+        .page-wrapper {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 40px 20px;
             min-height: 100vh;
+            min-height: 100dvh;
+            padding: 20px;
         }
 
-        /* --- Profile Card Styles --- */
         .profile-container {
-            background: rgba(15, 10, 15, 0); 
+            background: rgba(15, 10, 15, 0.7); 
             border: 2px solid rgba(255, 102, 178, 0.5);
             border-radius: 25px;
             box-shadow: 0 0 20px rgba(255, 102, 178, 0.2);
@@ -85,7 +80,6 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             animation: fadeIn 1.2s ease-out;
-            margin-bottom: 40px;
         }
 
         @keyframes fadeIn {
@@ -93,7 +87,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Layout Elements */
         .header { text-align: center; margin-bottom: 25px; }
         .welcome-text { font-size: 2.2rem; text-shadow: var(--neon-glow); font-weight: 700; }
         .profile-title { font-size: 3.8rem; text-shadow: var(--neon-glow); line-height: 1.1; margin-bottom: 10px; font-weight: 700; }
@@ -160,7 +153,6 @@
             box-shadow: 0 0 5px var(--neon-pink);
         }
 
-        /* Links */
         .links-wrapper { display: flex; flex-direction: column; gap: 15px; }
         .link-btn {
             display: flex;
@@ -178,6 +170,7 @@
             box-shadow: 0 0 15px rgba(255, 102, 178, 0.4);
             transform: translateY(-2px);
         }
+
         .icon-box {
             font-size: 1.8rem;
             width: 40px;
@@ -190,7 +183,6 @@
         .link-desc { font-size: 0.9rem; text-shadow: var(--neon-glow); }
         .footer-quote { text-align: center; font-size: 1.8rem; margin-top: 30px; text-shadow: var(--neon-glow); }
 
-        /* Sparkles */
         .sparkle { position: absolute; color: var(--neon-pink); text-shadow: var(--neon-glow); pointer-events: none; }
         .s1 { top: 20px; left: 20px; } .s2 { top: 60px; right: 30px; }
         .s3 { bottom: 40px; left: 30px; } .s4 { bottom: 80px; right: 20px; }
@@ -204,11 +196,7 @@
 </head>
 <body>
 
-    <div class="bg-container">
-        <div class="bg-image"></div>
-    </div>
-
-    <div class="content-scroll">
+    <div class="page-wrapper">
         <div class="profile-container">
             <i class="fa-solid fa-star-of-life sparkle s1"></i>
             <i class="fa-solid fa-heart sparkle s2"></i>
@@ -291,10 +279,11 @@
             <div class="footer-quote">
                 "Thank you for being here.<br>You mean the world ♡"
             </div>
-        </div>
+        </div> 
     </div>
 
     <script>
+        // --- MUSIC PLAYER ---
         const audio = document.getElementById('bg-music');
         const playBtn = document.getElementById('play-pause-btn');
         const icon = playBtn.querySelector('i');
