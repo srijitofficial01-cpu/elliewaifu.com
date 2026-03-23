@@ -20,31 +20,35 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            /* Prevents the grey highlight on mobile taps */
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* --- THE JUMP FIX --- */
         body {
             font-family: 'Dancing Script', cursive;
             color: var(--text-main);
             background-color: #0a050a;
-            margin: 0;
-            padding: 0;
+            /* Prevents pull-to-refresh "bounce" on some browsers */
+            overscroll-behavior: none;
         }
 
-        /* Using a fixed pseudo-element with 110vh prevents the "snap" when address bar hides */
+        /* --- THE ULTIMATE JUMP FIX --- */
+        /* We use a pseudo-element instead of background-attachment: fixed */
         body::before {
             content: "";
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 110vh; 
+            height: 100%;
+            /* Extra height to ensure no white gaps during scroll */
+            height: 120vh; 
             z-index: -1;
             background: url('https://i.imgur.com/Ogmlfsj.jpeg') no-repeat center center;
             background-size: cover;
-            /* Hardware acceleration to stop jitter */
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
+            /* Force Hardware Acceleration */
+            transform: translate3d(0, 0, 0);
+            -webkit-transform: translate3d(0, 0, 0);
             pointer-events: none;
         }
 
@@ -56,12 +60,14 @@
         }
 
         .page-wrapper {
-            display: flex ;
+            display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            /* Uses the modern dynamic viewport height to prevent jump */
             min-height: 100dvh;
             padding: 20px;
+            position: relative;
         }
 
         .profile-container {
@@ -73,8 +79,9 @@
             max-width: 450px;
             padding: 30px 25px;
             position: relative;
-            backdrop-filter: clean;
-            -webkit-backdrop-filter: clean;
+            /* Fixed the glassmorphism value */
+            backdrop-filter: ;
+            -webkit-backdrop-filter: blur(10px);
             animation: fadeIn 1.2s ease-out;
         }
 
@@ -108,7 +115,7 @@
         }
 
         .bio-content h3 { font-size: 2rem; text-shadow: var(--neon-glow); }
-        .bio-text { font-size: 1.1rem; text-shadow: var(--neon-glow); line-height: 1.4; }
+        .bio-text { font-size: 1.1rem; text-shadow: var(--neon-glow); line-height: 1.4; display: flex; flex-direction: column; }
 
         .music-player {
             display: flex;
@@ -129,6 +136,8 @@
             font-size: 1.5rem;
             cursor: pointer;
             text-shadow: var(--neon-glow);
+            /* Prevents double-tap zoom on button */
+            touch-action: manipulation;
         }
 
         .music-info { font-size: 1.2rem; text-shadow: var(--neon-glow); }
@@ -160,7 +169,10 @@
             text-decoration: none;
             color: #fff;
             transition: all 0.3s ease;
+            /* CRITICAL: Fixes zoom glitch on fast taps */
+            touch-action: manipulation;
         }
+
         .link-btn:hover {
             background: rgba(255, 102, 178, 0.15);
             box-shadow: 0 0 15px rgba(255, 102, 178, 0.4);
@@ -175,9 +187,11 @@
             color: #fff;
             text-shadow: var(--icon-neon);
         }
+        
+        .link-text { flex: 1; }
         .link-title { font-size: 1.7rem; text-shadow: var(--neon-glow); font-weight: 700; }
-        .link-desc { font-size: 0.9rem; text-shadow: var(--neon-glow); }
-        .footer-quote { text-align: center; font-size: 1.8rem; margin-top: 30px; text-shadow: var(--neon-glow); }
+        .link-desc { font-size: 0.85rem; text-shadow: var(--neon-glow); opacity: 0.9; }
+        .footer-quote { text-align: center; font-size: 1.8rem; margin-top: 30px; text-shadow: var(--neon-glow); line-height: 1.2; }
 
         .sparkle { position: absolute; color: var(--neon-pink); text-shadow: var(--neon-glow); pointer-events: none; }
         .s1 { top: 20px; left: 20px; } .s2 { top: 60px; right: 30px; }
