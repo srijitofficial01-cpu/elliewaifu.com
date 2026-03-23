@@ -29,34 +29,52 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* Use dynamic viewport height for modern browsers */
+            /* Support for modern mobile viewports */
             min-height: 100dvh;
             padding: 20px;
             background-color: #0a050a;
+            /* Allow scrolling of the content, but the body itself stays put */
             overflow-x: hidden;
         }
 
-        /* --- THE GLITCH KILLER BACKGROUND --- */
+        /* --- THE PERMANENTLY FIXED BACKGROUND --- */
         .bg-fixed {
-            position: fixed;
+            position: fixed; /* Locks it to the screen */
             top: 0;
             left: 0;
-            width: 100%;
-            /* Starts at 100lvh to cover the whole screen including address bar area */
-            height: 100lvh; 
-            z-index: -1;
+            width: 100vw;
+            height: 100vh; /* Fallback */
+            height: 100lvh; /* Large viewport to cover address bar gaps */
+            z-index: -1; /* Puts it behind everything */
+            
+            /* Background Properties */
             background: url('https://i.imgur.com/Ogmlfsj.jpeg') no-repeat center center;
             background-size: cover;
-            /* Prevents the "zoom" snap on scroll */
-            background-attachment: scroll;
-            /* Hardware acceleration */
-            transform: translate3d(0,0,0);
-            -webkit-transform: translate3d(0,0,0);
+            
+            /* FIX: This prevents the image from moving with the page scroll */
+            background-attachment: fixed;
+            
+            /* Performance & Stability Hacks */
+            pointer-events: none;
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            will-change: transform;
         }
 
+        /* --- DESKTOP BACKGROUND --- */
         @media (min-width: 850px) {
             .bg-fixed {
                 background-image: url('https://i.imgur.com/7iZDuwB.jpeg');
+                /* Desktop likes fixed attachment for that parallax feel */
+                background-attachment: fixed;
+            }
+        }
+
+        /* FIX: Some mobile browsers ignore background-attachment: fixed, 
+           so we force the container to be the absolute scroll reference */
+        @media (max-width: 849px) {
+            .bg-fixed {
+                background-attachment: scroll; /* CSS Trick: scroll + position:fixed = locked background */
             }
         }
 
@@ -72,6 +90,7 @@
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             animation: fadeIn 1.2s ease-out;
+            margin: 20px 0; /* Ensures there is space to scroll */
         }
 
         @keyframes fadeIn {
@@ -79,6 +98,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- Styling Sections --- */
         .header { text-align: center; margin-bottom: 25px; }
         .welcome-text { font-size: 2.2rem; text-shadow: var(--neon-glow); font-weight: 700; }
         .profile-title { font-size: 3.8rem; text-shadow: var(--neon-glow); line-height: 1.1; margin-bottom: 10px; font-weight: 700; }
@@ -94,6 +114,17 @@
             margin-bottom: 15px;
             background: rgba(0, 0, 0, 0.4);
         }
+
+        .pfp {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff; 
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .bio-content h3 { font-size: 2rem; text-shadow: var(--neon-glow); }
+        .bio-text { font-size: 1.1rem; text-shadow: var(--neon-glow); line-height: 1.4; }
 
         .music-player {
             display: flex;
@@ -117,17 +148,6 @@
         }
 
         .music-info { font-size: 1.2rem; text-shadow: var(--neon-glow); }
-
-        .pfp {
-            width: 80px; height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #fff; 
-            box-shadow: 0 0 10px var(--neon-pink);
-        }
-
-        .bio-content h3 { font-size: 2rem; text-shadow: var(--neon-glow); }
-        .bio-text { font-size: 1.1rem; text-shadow: var(--neon-glow); line-height: 1.4; }
 
         .divider {
             text-align: center;
@@ -187,7 +207,7 @@
 </head>
 <body>
 
-    <div class="bg-fixed" id="bg-target"></div>
+    <div class="bg-fixed" id="bg-frozen"></div>
 
     <div class="profile-container">
         <i class="fa-solid fa-star-of-life sparkle s1"></i>
@@ -274,24 +294,15 @@
     </div>
 
     <script>
-        // --- THE JUMP KILLER SCRIPT ---
-        const bg = document.getElementById('bg-target');
-        
-        const lockBackgroundHeight = () => {
-            // Get the absolute height of the screen once
-            const currentHeight = window.innerHeight;
-            // Freeze it on the background div
-            bg.style.height = currentHeight + 'px';
+        // --- HEIGHT LOCKER ---
+        const bg = document.getElementById('bg-frozen');
+        const lockHeight = () => {
+            bg.style.height = window.innerHeight + 'px';
         };
+        window.addEventListener('load', lockHeight);
+        window.addEventListener('resize', lockHeight);
 
-        // Run on load and whenever screen rotation changes
-        window.addEventListener('load', lockBackgroundHeight);
-        window.addEventListener('orientationchange', () => {
-            // Short delay to allow browser to calculate new orientation height
-            setTimeout(lockBackgroundHeight, 100);
-        });
-
-        // --- MUSIC PLAYER ---
+        // --- MUSIC ---
         const audio = document.getElementById('bg-music');
         const playBtn = document.getElementById('play-pause-btn');
         const icon = playBtn.querySelector('i');
