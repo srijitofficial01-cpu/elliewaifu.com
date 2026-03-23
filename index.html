@@ -20,58 +20,48 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            /* Prevents the grey highlight on mobile taps */
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Dancing Script', cursive;
             color: var(--text-main);
-            background-color: #0a050a;
-            /* Prevents pull-to-refresh "bounce" on some browsers */
-            overscroll-behavior: none;
-        }
-
-        /* --- THE ULTIMATE JUMP FIX --- */
-        /* We use a pseudo-element instead of background-attachment: fixed */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Extra height to ensure no white gaps during scroll */
-            height: 120vh; 
-            z-index: -1;
-            background: url('https://i.imgur.com/Ogmlfsj.jpeg') no-repeat center center;
-            background-size: cover;
-            /* Force Hardware Acceleration */
-            transform: translate3d(0, 0, 0);
-            -webkit-transform: translate3d(0, 0, 0);
-            pointer-events: none;
-        }
-
-        @media (min-width: 850px) {
-            body::before {
-                background-image: url('https://i.imgur.com/7iZDuwB.jpeg');
-                height: 100vh;
-            }
-        }
-
-        .page-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* Uses the modern dynamic viewport height to prevent jump */
+            /* Use dynamic viewport height for modern browsers */
             min-height: 100dvh;
             padding: 20px;
-            position: relative;
+            background-color: #0a050a;
+            overflow-x: hidden;
+        }
+
+        /* --- THE GLITCH KILLER BACKGROUND --- */
+        .bg-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* Starts at 100lvh to cover the whole screen including address bar area */
+            height: 100lvh; 
+            z-index: -1;
+            background: url('https://i.imgur.com/oNsBqnf.jpeg') no-repeat center center;
+            background-size: cover;
+            /* Prevents the "zoom" snap on scroll */
+            background-attachment: scroll;
+            /* Hardware acceleration */
+            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0,0,0);
+        }
+
+        @media (min-width: 850px) {
+            .bg-fixed {
+                background-image: url('https://i.imgur.com/7iZDuwB.jpeg');
+            }
         }
 
         .profile-container {
-            background: rgba(15, 10, 15, 0); 
+            background: rgba(15, 10, 15, 0.7); 
             border: 2px solid rgba(255, 102, 178, 0.5);
             border-radius: 25px;
             box-shadow: 0 0 20px rgba(255, 102, 178, 0.2);
@@ -79,9 +69,8 @@
             max-width: 450px;
             padding: 30px 25px;
             position: relative;
-            /* Fixed the glassmorphism value */
-            backdrop-filter: ;
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             animation: fadeIn 1.2s ease-out;
         }
 
@@ -106,17 +95,6 @@
             background: rgba(0, 0, 0, 0.4);
         }
 
-        .pfp {
-            width: 80px; height: 80px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #fff; 
-            box-shadow: 0 0 10px var(--neon-pink);
-        }
-
-        .bio-content h3 { font-size: 2rem; text-shadow: var(--neon-glow); }
-        .bio-text { font-size: 1.1rem; text-shadow: var(--neon-glow); line-height: 1.4; display: flex; flex-direction: column; }
-
         .music-player {
             display: flex;
             align-items: center;
@@ -136,11 +114,20 @@
             font-size: 1.5rem;
             cursor: pointer;
             text-shadow: var(--neon-glow);
-            /* Prevents double-tap zoom on button */
-            touch-action: manipulation;
         }
 
         .music-info { font-size: 1.2rem; text-shadow: var(--neon-glow); }
+
+        .pfp {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff; 
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .bio-content h3 { font-size: 2rem; text-shadow: var(--neon-glow); }
+        .bio-text { font-size: 1.1rem; text-shadow: var(--neon-glow); line-height: 1.4; }
 
         .divider {
             text-align: center;
@@ -169,16 +156,12 @@
             text-decoration: none;
             color: #fff;
             transition: all 0.3s ease;
-            /* CRITICAL: Fixes zoom glitch on fast taps */
-            touch-action: manipulation;
         }
-
         .link-btn:hover {
             background: rgba(255, 102, 178, 0.15);
             box-shadow: 0 0 15px rgba(255, 102, 178, 0.4);
             transform: translateY(-2px);
         }
-
         .icon-box {
             font-size: 1.8rem;
             width: 40px;
@@ -187,11 +170,9 @@
             color: #fff;
             text-shadow: var(--icon-neon);
         }
-        
-        .link-text { flex: 1; }
         .link-title { font-size: 1.7rem; text-shadow: var(--neon-glow); font-weight: 700; }
-        .link-desc { font-size: 0.85rem; text-shadow: var(--neon-glow); opacity: 0.9; }
-        .footer-quote { text-align: center; font-size: 1.8rem; margin-top: 30px; text-shadow: var(--neon-glow); line-height: 1.2; }
+        .link-desc { font-size: 0.9rem; text-shadow: var(--neon-glow); }
+        .footer-quote { text-align: center; font-size: 1.8rem; margin-top: 30px; text-shadow: var(--neon-glow); }
 
         .sparkle { position: absolute; color: var(--neon-pink); text-shadow: var(--neon-glow); pointer-events: none; }
         .s1 { top: 20px; left: 20px; } .s2 { top: 60px; right: 30px; }
@@ -206,93 +187,111 @@
 </head>
 <body>
 
-    <div class="page-wrapper">
-        <div class="profile-container">
-            <i class="fa-solid fa-star-of-life sparkle s1"></i>
-            <i class="fa-solid fa-heart sparkle s2"></i>
-            <i class="fa-solid fa-star-of-life sparkle s3"></i>
-            <i class="fa-solid fa-heart sparkle s4"></i>
+    <div class="bg-fixed" id="bg-target"></div>
 
-            <div class="layout-wrapper">
-                <div class="profile-info">
-                    <div class="header">
-                        <div class="welcome-text">Welcome to</div>
-                        <div class="profile-title">Ellie's World</div>
-                        <div class="subtitle">~ Thank you for visiting ~</div>
+    <div class="profile-container">
+        <i class="fa-solid fa-star-of-life sparkle s1"></i>
+        <i class="fa-solid fa-heart sparkle s2"></i>
+        <i class="fa-solid fa-star-of-life sparkle s3"></i>
+        <i class="fa-solid fa-heart sparkle s4"></i>
+
+        <div class="layout-wrapper">
+            <div class="profile-info">
+                <div class="header">
+                    <div class="welcome-text">Welcome to</div>
+                    <div class="profile-title">Ellie's World</div>
+                    <div class="subtitle">~ Thank you for visiting ~</div>
+                </div>
+
+                <div class="about-section">
+                    <div class="pfp-wrapper">
+                        <img src="https://i.imgur.com/jI2cqWi.jpeg" alt="Ellie Profile" class="pfp" loading="lazy">
                     </div>
-
-                    <div class="about-section">
-                        <div class="pfp-wrapper">
-                            <img src="https://i.imgur.com/jI2cqWi.jpeg" alt="Ellie Profile" class="pfp" loading="lazy">
+                    <div class="bio-content">
+                        <h3>About Me 🌸</h3>
+                        <div class="bio-text">
+                            <span>Hi, I'm Ellie. 💋</span>
+                            <span>You have the desire,</span>
+                            <span>I have the magic to make it real. 🔥</span>
                         </div>
-                        <div class="bio-content">
-                            <h3>About Me 🌸</h3>
-                            <div class="bio-text">
-                                <span>Hi, I'm Ellie. 💋</span>
-                                <span>You have the desire,</span>
-                                <span>I have the magic to make it real. 🔥</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="music-player">
-                        <button id="play-pause-btn"><i class="fa-solid fa-play"></i></button>
-                        <div class="music-info">Listening to: <i>Ellie's Choice 💞</i></div>
-                        <audio id="bg-music" loop preload="none">
-                            <source src="https://image2url.com/r2/default/audio/1774200360356-88c2716e-4945-43c2-ae84-572b77ad93b1.mp3" type="audio/mpeg">
-                        </audio>
                     </div>
                 </div>
 
-                <div class="links-section">
-                    <div class="divider">~ FOLLOW ME ~</div>
-                    <div class="links-wrapper">
-                        <a href="https://www.instagram.com/ellie_waifu_?igsh=NDR4ZnYzczNqOTNu" target="_blank" class="link-btn">
-                            <div class="icon-box"><i class="fa-brands fa-instagram"></i></div>
-                            <div class="link-text">
-                                <div class="link-title">Instagram</div>
-                                <div class="link-desc">FOLLOW FOR UPDATES & STORIES</div>
-                            </div>
-                            <i class="fa-solid fa-arrow-right arrow"></i>
-                        </a>
-
-                        <a href="https://patreon.com/_Ellie_Waifu" target="_blank" class="link-btn">
-                            <div class="icon-box"><i class="fa-brands fa-patreon"></i></div>
-                            <div class="link-text">
-                                <div class="link-title">Patreon</div>
-                                <div class="link-desc">EXCLUSIVE CONTENT & REWARDS</div>
-                            </div>
-                            <i class="fa-solid fa-arrow-right arrow"></i>
-                        </a>
-
-                        <a href="https://throne.com/ellie_waifu_" target="_blank" class="link-btn">
-                            <div class="icon-box"><i class="fa-solid fa-crown"></i></div>
-                            <div class="link-text">
-                                <div class="link-title">Throne</div>
-                                <div class="link-desc">SUPPORT & SEND GIFTS</div>
-                            </div>
-                            <i class="fa-solid fa-arrow-right arrow"></i>
-                        </a>
-
-                        <a href="https://x.com/EllieSenpa73870" target="_blank" class="link-btn">
-                            <div class="icon-box"><i class="fa-brands fa-x-twitter"></i></div>
-                            <div class="link-text">
-                                <div class="link-title">X (Twitter)</div>
-                                <div class="link-desc">LATEST POSTS & UPDATES</div>
-                            </div>
-                            <i class="fa-solid fa-arrow-right arrow"></i>
-                        </a>
-                    </div>
+                <div class="music-player">
+                    <button id="play-pause-btn"><i class="fa-solid fa-play"></i></button>
+                    <div class="music-info">Listening to: <i>Ellie's Choice 💞</i></div>
+                    <audio id="bg-music" loop preload="none">
+                        <source src="https://image2url.com/r2/default/audio/1774200360356-88c2716e-4945-43c2-ae84-572b77ad93b1.mp3" type="audio/mpeg">
+                    </audio>
                 </div>
-            </div> 
+            </div>
 
-            <div class="footer-quote">
-                "Thank you for being here.<br>You mean the world ♡"
+            <div class="links-section">
+                <div class="divider">~ FOLLOW ME ~</div>
+                <div class="links-wrapper">
+                    <a href="https://www.instagram.com/ellie_waifu_?igsh=NDR4ZnYzczNqOTNu" target="_blank" class="link-btn">
+                        <div class="icon-box"><i class="fa-brands fa-instagram"></i></div>
+                        <div class="link-text">
+                            <div class="link-title">Instagram</div>
+                            <div class="link-desc">FOLLOW FOR UPDATES & STORIES</div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right arrow"></i>
+                    </a>
+
+                    <a href="https://patreon.com/_Ellie_Waifu" target="_blank" class="link-btn">
+                        <div class="icon-box"><i class="fa-brands fa-patreon"></i></div>
+                        <div class="link-text">
+                            <div class="link-title">Patreon</div>
+                            <div class="link-desc">EXCLUSIVE CONTENT & REWARDS</div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right arrow"></i>
+                    </a>
+
+                    <a href="https://throne.com/ellie_waifu_" target="_blank" class="link-btn">
+                        <div class="icon-box"><i class="fa-solid fa-crown"></i></div>
+                        <div class="link-text">
+                            <div class="link-title">Throne</div>
+                            <div class="link-desc">SUPPORT & SEND GIFTS</div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right arrow"></i>
+                    </a>
+
+                    <a href="https://x.com/EllieSenpa73870" target="_blank" class="link-btn">
+                        <div class="icon-box"><i class="fa-brands fa-x-twitter"></i></div>
+                        <div class="link-text">
+                            <div class="link-title">X (Twitter)</div>
+                            <div class="link-desc">LATEST POSTS & UPDATES</div>
+                        </div>
+                        <i class="fa-solid fa-arrow-right arrow"></i>
+                    </a>
+                </div>
             </div>
         </div> 
+
+        <div class="footer-quote">
+            "Thank you for being here.<br>You mean the world ♡"
+        </div>
     </div>
 
     <script>
+        // --- THE JUMP KILLER SCRIPT ---
+        const bg = document.getElementById('bg-target');
+        
+        const lockBackgroundHeight = () => {
+            // Get the absolute height of the screen once
+            const currentHeight = window.innerHeight;
+            // Freeze it on the background div
+            bg.style.height = currentHeight + 'px';
+        };
+
+        // Run on load and whenever screen rotation changes
+        window.addEventListener('load', lockBackgroundHeight);
+        window.addEventListener('orientationchange', () => {
+            // Short delay to allow browser to calculate new orientation height
+            setTimeout(lockBackgroundHeight, 100);
+        });
+
+        // --- MUSIC PLAYER ---
         const audio = document.getElementById('bg-music');
         const playBtn = document.getElementById('play-pause-btn');
         const icon = playBtn.querySelector('i');
