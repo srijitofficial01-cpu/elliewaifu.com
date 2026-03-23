@@ -22,39 +22,59 @@
             padding: 0;
         }
 
-        /* --- THE GLITCH-PROOF BACKGROUND STRATEGY --- */
-        html {
-            /* We set the background here so it's outside the body scroll */
-            background: #0a050a url('https://i.imgur.com/Ogmlfsj.jpeg') no-repeat center center fixed;
-            background-size: cover;
+        /* --- THE NUCLEAR OPTION FOR JUMPING GLITCHES --- */
+        html, body {
             height: 100%;
-            overflow: hidden; /* Prevents the 'bounce' effect */
-        }
-
-        body {
+            background-color: #0a050a;
             font-family: 'Dancing Script', cursive;
             color: var(--text-main);
+        }
+
+        .bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            overflow-y: auto; /* Content scrolls inside the body */
-            -webkit-overflow-scrolling: touch; /* Smooth momentum scroll for iOS */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Start from top so it doesn't jump to center */
-            padding: 40px 20px;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* Set height slightly larger than 100% to account for address bar buffer */
+            height: 120vh; 
+            background: url('https://i.imgur.com/Ogmlfsj.jpeg') no-repeat center center;
+            background-size: cover;
+            /* Force hardware acceleration to keep it smooth */
+            transform: translate3d(0,0,0);
+            -webkit-transform: translate3d(0,0,0);
         }
 
         @media (min-width: 850px) {
-            html {
+            .bg-image {
                 background-image: url('https://i.imgur.com/7iZDuwB.jpeg');
-            }
-            body {
-                align-items: center; /* Center on desktop where there's no address bar jump */
+                height: 100vh;
             }
         }
 
-        /* --- Profile Card --- */
+        /* Scrolling content wrapper */
+        .content-scroll {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        /* --- Profile Card Styles --- */
         .profile-container {
-            background: rgba(15, 10, 15, 0.7); 
+            background: rgba(15, 10, 15, 0); 
             border: 2px solid rgba(255, 102, 178, 0.5);
             border-radius: 25px;
             box-shadow: 0 0 20px rgba(255, 102, 178, 0.2);
@@ -73,7 +93,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Header & Sections */
+        /* Layout Elements */
         .header { text-align: center; margin-bottom: 25px; }
         .welcome-text { font-size: 2.2rem; text-shadow: var(--neon-glow); font-weight: 700; }
         .profile-title { font-size: 3.8rem; text-shadow: var(--neon-glow); line-height: 1.1; margin-bottom: 10px; font-weight: 700; }
@@ -170,6 +190,7 @@
         .link-desc { font-size: 0.9rem; text-shadow: var(--neon-glow); }
         .footer-quote { text-align: center; font-size: 1.8rem; margin-top: 30px; text-shadow: var(--neon-glow); }
 
+        /* Sparkles */
         .sparkle { position: absolute; color: var(--neon-pink); text-shadow: var(--neon-glow); pointer-events: none; }
         .s1 { top: 20px; left: 20px; } .s2 { top: 60px; right: 30px; }
         .s3 { bottom: 40px; left: 30px; } .s4 { bottom: 80px; right: 20px; }
@@ -183,87 +204,93 @@
 </head>
 <body>
 
-    <div class="profile-container">
-        <i class="fa-solid fa-star-of-life sparkle s1"></i>
-        <i class="fa-solid fa-heart sparkle s2"></i>
-        <i class="fa-solid fa-star-of-life sparkle s3"></i>
-        <i class="fa-solid fa-heart sparkle s4"></i>
+    <div class="bg-container">
+        <div class="bg-image"></div>
+    </div>
 
-        <div class="layout-wrapper">
-            <div class="profile-info">
-                <div class="header">
-                    <div class="welcome-text">Welcome to</div>
-                    <div class="profile-title">Ellie's World</div>
-                    <div class="subtitle">~ Thank you for visiting ~</div>
-                </div>
+    <div class="content-scroll">
+        <div class="profile-container">
+            <i class="fa-solid fa-star-of-life sparkle s1"></i>
+            <i class="fa-solid fa-heart sparkle s2"></i>
+            <i class="fa-solid fa-star-of-life sparkle s3"></i>
+            <i class="fa-solid fa-heart sparkle s4"></i>
 
-                <div class="about-section">
-                    <div class="pfp-wrapper">
-                        <img src="https://i.imgur.com/jI2cqWi.jpeg" alt="Ellie Profile" class="pfp" loading="lazy">
+            <div class="layout-wrapper">
+                <div class="profile-info">
+                    <div class="header">
+                        <div class="welcome-text">Welcome to</div>
+                        <div class="profile-title">Ellie's World</div>
+                        <div class="subtitle">~ Thank you for visiting ~</div>
                     </div>
-                    <div class="bio-content">
-                        <h3>About Me 🌸</h3>
-                        <div class="bio-text">
-                            <span>Hi, I'm Ellie. 💋</span>
-                            <span>You have the desire,</span>
-                            <span>I have the magic to make it real. 🔥</span>
+
+                    <div class="about-section">
+                        <div class="pfp-wrapper">
+                            <img src="https://i.imgur.com/jI2cqWi.jpeg" alt="Ellie Profile" class="pfp" loading="lazy">
                         </div>
+                        <div class="bio-content">
+                            <h3>About Me 🌸</h3>
+                            <div class="bio-text">
+                                <span>Hi, I'm Ellie. 💋</span>
+                                <span>You have the desire,</span>
+                                <span>I have the magic to make it real. 🔥</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="music-player">
+                        <button id="play-pause-btn"><i class="fa-solid fa-play"></i></button>
+                        <div class="music-info">Listening to: <i>Ellie's Choice 💞</i></div>
+                        <audio id="bg-music" loop preload="none">
+                            <source src="https://image2url.com/r2/default/audio/1774200360356-88c2716e-4945-43c2-ae84-572b77ad93b1.mp3" type="audio/mpeg">
+                        </audio>
                     </div>
                 </div>
 
-                <div class="music-player">
-                    <button id="play-pause-btn"><i class="fa-solid fa-play"></i></button>
-                    <div class="music-info">Listening to: <i>Ellie's Choice 💞</i></div>
-                    <audio id="bg-music" loop preload="none">
-                        <source src="https://image2url.com/r2/default/audio/1774200360356-88c2716e-4945-43c2-ae84-572b77ad93b1.mp3" type="audio/mpeg">
-                    </audio>
+                <div class="links-section">
+                    <div class="divider">~ FOLLOW ME ~</div>
+                    <div class="links-wrapper">
+                        <a href="https://www.instagram.com/ellie_waifu_?igsh=NDR4ZnYzczNqOTNu" target="_blank" class="link-btn">
+                            <div class="icon-box"><i class="fa-brands fa-instagram"></i></div>
+                            <div class="link-text">
+                                <div class="link-title">Instagram</div>
+                                <div class="link-desc">FOLLOW FOR UPDATES & STORIES</div>
+                            </div>
+                            <i class="fa-solid fa-arrow-right arrow"></i>
+                        </a>
+
+                        <a href="https://patreon.com/_Ellie_Waifu" target="_blank" class="link-btn">
+                            <div class="icon-box"><i class="fa-brands fa-patreon"></i></div>
+                            <div class="link-text">
+                                <div class="link-title">Patreon</div>
+                                <div class="link-desc">EXCLUSIVE CONTENT & REWARDS</div>
+                            </div>
+                            <i class="fa-solid fa-arrow-right arrow"></i>
+                        </a>
+
+                        <a href="https://throne.com/ellie_waifu_" target="_blank" class="link-btn">
+                            <div class="icon-box"><i class="fa-solid fa-crown"></i></div>
+                            <div class="link-text">
+                                <div class="link-title">Throne</div>
+                                <div class="link-desc">SUPPORT & SEND GIFTS</div>
+                            </div>
+                            <i class="fa-solid fa-arrow-right arrow"></i>
+                        </a>
+
+                        <a href="https://x.com/EllieSenpa73870" target="_blank" class="link-btn">
+                            <div class="icon-box"><i class="fa-brands fa-x-twitter"></i></div>
+                            <div class="link-text">
+                                <div class="link-title">X (Twitter)</div>
+                                <div class="link-desc">LATEST POSTS & UPDATES</div>
+                            </div>
+                            <i class="fa-solid fa-arrow-right arrow"></i>
+                        </a>
+                    </div>
                 </div>
+            </div> 
+
+            <div class="footer-quote">
+                "Thank you for being here.<br>You mean the world ♡"
             </div>
-
-            <div class="links-section">
-                <div class="divider">~ FOLLOW ME ~</div>
-                <div class="links-wrapper">
-                    <a href="https://www.instagram.com/ellie_waifu_?igsh=NDR4ZnYzczNqOTNu" target="_blank" class="link-btn">
-                        <div class="icon-box"><i class="fa-brands fa-instagram"></i></div>
-                        <div class="link-text">
-                            <div class="link-title">Instagram</div>
-                            <div class="link-desc">FOLLOW FOR UPDATES & STORIES</div>
-                        </div>
-                        <i class="fa-solid fa-arrow-right arrow"></i>
-                    </a>
-
-                    <a href="https://patreon.com/_Ellie_Waifu" target="_blank" class="link-btn">
-                        <div class="icon-box"><i class="fa-brands fa-patreon"></i></div>
-                        <div class="link-text">
-                            <div class="link-title">Patreon</div>
-                            <div class="link-desc">EXCLUSIVE CONTENT & REWARDS</div>
-                        </div>
-                        <i class="fa-solid fa-arrow-right arrow"></i>
-                    </a>
-
-                    <a href="https://throne.com/ellie_waifu_" target="_blank" class="link-btn">
-                        <div class="icon-box"><i class="fa-solid fa-crown"></i></div>
-                        <div class="link-text">
-                            <div class="link-title">Throne</div>
-                            <div class="link-desc">SUPPORT & SEND GIFTS</div>
-                        </div>
-                        <i class="fa-solid fa-arrow-right arrow"></i>
-                    </a>
-
-                    <a href="https://x.com/EllieSenpa73870" target="_blank" class="link-btn">
-                        <div class="icon-box"><i class="fa-brands fa-x-twitter"></i></div>
-                        <div class="link-text">
-                            <div class="link-title">X (Twitter)</div>
-                            <div class="link-desc">LATEST POSTS & UPDATES</div>
-                        </div>
-                        <i class="fa-solid fa-arrow-right arrow"></i>
-                    </a>
-                </div>
-            </div>
-        </div> 
-
-        <div class="footer-quote">
-            "Thank you for being here.<br>You mean the world ♡"
         </div>
     </div>
 
