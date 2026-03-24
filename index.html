@@ -29,7 +29,6 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* Use dynamic viewport height for modern browsers */
             min-height: 100dvh;
             padding: 20px;
             overflow-x: hidden;
@@ -37,20 +36,20 @@
 
         /* --- THE GLITCH KILLER BACKGROUND --- */
         .bg-fixed {
-            position: fixed;
+            position: fixed; /* Locks the div to the screen */
             top: 0;
             left: 0;
-            width: 100%;
-            /* Starts at 100lvh to cover the whole screen including address bar area */
-            height: 100lvh; 
+            width: 100vw;
+            height: 100vh; 
             z-index: -1;
             background: url('https://i.imgur.com/N1c8FOD.jpeg') no-repeat center center;
             background-size: cover;
-            /* Prevents the "zoom" snap on scroll */
-            background-attachment: fixed;
-            /* Hardware acceleration */
-            transform: translate3d(0,0,0);
-            -webkit-transform: translate3d(0,0,0);
+            /* REMOVED background-attachment: fixed; to fix mobile jitter */
+            
+            /* Hardware acceleration to keep it smooth */
+            transform: translateZ(0);
+            -webkit-transform: translateZ(0);
+            will-change: transform;
         }
 
         @media (min-width: 850px) {
@@ -277,16 +276,14 @@
         const bg = document.getElementById('bg-target');
         
         const lockBackgroundHeight = () => {
-            // Get the absolute height of the screen once
+            // Use innerHeight to account for mobile browser UIbars
             const currentHeight = window.innerHeight;
-            // Freeze it on the background div
             bg.style.height = currentHeight + 'px';
         };
 
-        // Run on load and whenever screen rotation changes
         window.addEventListener('load', lockBackgroundHeight);
+        window.addEventListener('resize', lockBackgroundHeight); // Added resize listener for orientation changes/browser bar hiding
         window.addEventListener('orientationchange', () => {
-            // Short delay to allow browser to calculate new orientation height
             setTimeout(lockBackgroundHeight, 100);
         });
 
