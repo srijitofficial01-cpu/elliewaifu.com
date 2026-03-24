@@ -29,7 +29,7 @@
             
             /* Background settings */
             background-color: #0a050a; 
-            background-image: url('https://i.imgur.com/Ogmlfsj.jpeg');
+            background-image: url('https://i.imgur.com/N1c8FOD.jpeg');
             background-repeat: no-repeat;
             background-position: top center;
             background-size: cover; 
@@ -68,11 +68,9 @@
             color: var(--neon-pink);
             text-shadow: var(--neon-glow);
             opacity: 0;
-            /* PERFORMANCE FIXES: Force GPU acceleration to stop vibrating */
             will-change: transform, opacity;
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            /* Prevents jagged edges while moving */
             -webkit-font-smoothing: antialiased; 
         }
 
@@ -83,7 +81,6 @@
         .d5 { top: 85%; left: 20%; font-size: 4rem; animation: float 11s ease-in-out infinite 2s; }
         .d6 { top: 80%; right: 15%; font-size: 2.8rem; animation: floatReverse 13s ease-in-out infinite 4s; }
 
-        /* Smooth GPU-Accelerated Animations (translate3d stops the jitter) */
         @keyframes float {
             0% { transform: translate3d(0, 0, 0) rotate(0deg) scale(1); opacity: 0.3; }
             33% { transform: translate3d(15px, -20px, 0) rotate(10deg) scale(1.05); opacity: 0.8; }
@@ -195,6 +192,7 @@
             text-decoration: none;
             color: #fff;
             transition: all 0.3s ease;
+            position: relative;
         }
         .link-btn:hover {
             background: rgba(255, 102, 178, 0.15);
@@ -210,11 +208,24 @@
             color: #fff;
             text-shadow: var(--icon-neon);
         }
+        .link-text { flex-grow: 1; }
         .link-title { font-size: 1.7rem; text-shadow: var(--neon-glow); font-weight: 700; }
         .link-desc { font-size: 0.9rem; text-shadow: var(--neon-glow); }
+
+        /* --- NEON ARROW FIX --- */
+        .arrow {
+            font-size: 1.2rem;
+            color: #fff;
+            text-shadow: var(--icon-neon); /* Applying the neon glow */
+            transition: transform 0.3s ease, text-shadow 0.3s ease;
+        }
+        .link-btn:hover .arrow {
+            transform: translateX(5px);
+            text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-pink), 0 0 30px var(--neon-pink);
+        }
+
         .footer-quote { text-align: center; font-size: 1.8rem; margin-top: 30px; text-shadow: var(--neon-glow); }
 
-        /* GLOW FIX FOR HEARTS AND FLOWERS (No Shadows) */
         .neon-heart {
             color: var(--neon-pink);
             text-shadow: var(--neon-glow);
@@ -276,7 +287,7 @@
 
                 <div class="music-player">
                     <button id="play-pause-btn"><i class="fa-solid fa-play"></i></button>
-                    <div class="music-info">Listening to: <i>Ellie's Choice <span class="neon-heart">♡</span></i></div>
+                    <div class="music-info">Listening to: <i>Ellie's Choice ♡<span class="neon-heart"></span></i></div>
                     <audio id="bg-music" loop preload="auto">
                         <source src="https://image2url.com/r2/default/audio/1774200360356-88c2716e-4945-43c2-ae84-572b77ad93b1.mp3" type="audio/mpeg">
                     </audio>
