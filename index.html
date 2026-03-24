@@ -29,7 +29,7 @@
             
             /* Background settings */
             background-color: #0a050a; 
-            background-image: url('https://i.imgur.com/N1c8FOD.jpeg');
+            background-image: url('https://i.imgur.com/Ogmlfsj.jpeg');
             background-repeat: no-repeat;
             background-position: top center;
             background-size: cover; 
@@ -277,7 +277,7 @@
                 <div class="music-player">
                     <button id="play-pause-btn"><i class="fa-solid fa-play"></i></button>
                     <div class="music-info">Listening to: <i>Ellie's Choice <span class="neon-heart">♡</span></i></div>
-                    <audio id="bg-music" loop preload="none">
+                    <audio id="bg-music" loop preload="auto">
                         <source src="https://image2url.com/r2/default/audio/1774200360356-88c2716e-4945-43c2-ae84-572b77ad93b1.mp3" type="audio/mpeg">
                     </audio>
                 </div>
@@ -326,7 +326,7 @@
         </div> 
 
         <div class="footer-quote">
-            "Thank you for being here.<br>You mean the world ♡<span class="neon-heart
+            "Thank you for being here.<br>You mean the world ♡"
         </div>
     </div>
 
@@ -337,7 +337,9 @@
 
         playBtn.addEventListener('click', () => {
             if (audio.paused) {
-                audio.play();
+                audio.play().catch(error => {
+                    console.log("Audio playback failed:", error);
+                });
                 icon.classList.remove('fa-play');
                 icon.classList.add('fa-pause');
             } else {
